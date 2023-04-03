@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Services;
+
 use App\Repositories\TaskRepository;
 
 class TaskService
@@ -51,5 +52,17 @@ class TaskService
     public function destroy($task)
     {
         return $this->taskRepository->destroy($task);
+    }
+
+    /**
+     * Restore the specified resource from trash.
+     */
+    public function restore($id)
+    {
+        if ($this->taskRepository->restore($id)) {
+            return 'Task restored successfully';
+        } else {
+            return 'Something has happend';
+        }
     }
 }

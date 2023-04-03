@@ -29,22 +29,11 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TaskRequest $request)
+    public function store(Request $request)
     {
-        $task = $this->taskService->store($request);
+        $this->taskService->store($request);
 
-        return response()->json([
-            'message' => 'Task saved successfully',
-            'task' => [
-                'Id' => $task->id,
-                'User' => $task->user->name,
-                'Status' => $task->state->name,
-                'Title' => $task->title,
-                'Description' => $task->description,
-                'Start' => $task->start_date,
-                'End' => $task->end_date,
-            ]
-        ], 201);
+        return response()->json(['message' => 'Task saved successfully'], 201);
     }
 
     /**
@@ -58,13 +47,13 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(TaskRequest $request, Task $task)
+    public function update(Request $request, Task $task)
     {
         $this->taskService->update($request, $task);
         return response()->json(
             [
                 'message' => 'Task updated successfully',
-                'task' => $task
+                'task' => new TaskResource($task)
             ]
         );
     }
@@ -75,6 +64,14 @@ class TaskController extends Controller
     public function destroy(Task $task)
     {
         $this->taskService->destroy($task);
-        return response()->json(['message' => 'Task deleted succesfully'], 204);
+        return response()->json([''], 204);
+    }
+
+    /**
+     * Restore the specified resource from trash.
+     */
+    public function restore($id)
+    {
+        return response()->json(['message' => $this->taskService->restore($id)], 200);
     }
 }

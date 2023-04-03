@@ -22,7 +22,7 @@ class TaskRepository implements TaskInterface
      */
     public function store($request)
     {
-        return new TaskResource(Task::create($request->all()));
+        return Task::create($request->all());
     }
 
     /**
@@ -30,7 +30,7 @@ class TaskRepository implements TaskInterface
      */
     public function show($task)
     {
-        return Task::find($task);
+        return new TaskResource($task);
     }
 
     /**
@@ -38,7 +38,7 @@ class TaskRepository implements TaskInterface
      */
     public function update($request, $task)
     {
-        return $task->update($request);
+        return $task->update($request->all());
     }
 
     /**
@@ -47,5 +47,13 @@ class TaskRepository implements TaskInterface
     public function destroy($task)
     {
         return $task->delete();
+    }
+
+    /**
+     * Restore the specified resource from trash.
+     */
+    public function restore($id)
+    {
+        return Task::withTrashed()->find($id)->restore();
     }
 }

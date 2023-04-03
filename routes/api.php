@@ -22,9 +22,14 @@ Route::prefix('auth')->group(function(){
     Route::post('register', [AuthController::class, 'register']);
     Route::get('me', [AuthController::class, 'me']);
 });
+
 Route::middleware('auth:api')->group(function(){
     Route::prefix('task')->group(function() {
         Route::get('all', [TaskController::class, 'all']);
         Route::post('create', [TaskController::class, 'store']);
+        Route::get('{task}', [TaskController::class, 'show']);
+        Route::put('update/{task}', [TaskController::class, 'update']);
+        Route::delete('delete/{task}', [TaskController::class, 'destroy']);
+        Route::get('restore/{task}', [TaskController::class, 'restore']);
     });
 });
