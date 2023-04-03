@@ -10,10 +10,15 @@ class AuthController extends Controller
 {
 
     protected $authService;
+    protected $except = [
+        'login',
+        'logout',
+        'register',
+    ];
 
     public function __construct(AuthService $authService)
     {
-        $this->middleware('auth:api', ['except' => ['register']]);
+        $this->middleware('auth:api', ['except' => $this->except]);
         $this->authService = $authService;
     }
 
