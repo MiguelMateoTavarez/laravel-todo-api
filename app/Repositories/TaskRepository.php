@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Http\Resources\TaskCollection;
 use App\Http\Resources\TaskResource;
 use App\Interfaces\TaskInterface;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
 class TaskRepository implements TaskInterface
 {
@@ -14,7 +14,7 @@ class TaskRepository implements TaskInterface
      */
     public function all()
     {
-        return new TaskCollection(Task::with(['user', 'state'])->get());
+        return TaskResource::collection(Task::ownedBy(auth()->user())->get());
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Services\TaskService;
@@ -23,7 +22,12 @@ class TaskController extends Controller
      */
     public function all()
     {
-        return response()->json($this->taskService->all(), 200);
+        $result = $this->taskService->all();
+
+        return 
+            is_string($result) ? 
+            response()->json(['message' => $result], 403) :
+            response()->json($this->taskService->all(), 200);
     }
 
     /**
