@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -44,5 +45,18 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $except)
+    {
+        if ($except instanceof AuthorizationException) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => $except->getMessage()], 403);
+            } else {
+                return response($except->getMessage(), 403);
+            }
+        }
+
+        return parent::render($request, $except);
     }
 }
