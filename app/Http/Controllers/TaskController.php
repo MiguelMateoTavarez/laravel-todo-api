@@ -15,6 +15,7 @@ class TaskController extends Controller
     public function __construct(TaskService $taskService)
     {
         $this->taskService = $taskService;
+        $this->authorizeResource(Task::class, 'task');
     }
 
     /**
